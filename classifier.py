@@ -2,6 +2,8 @@
 #from tkinter import filedialog
 #from tkinter import *
 from PIL import  Image
+#from keras.models import Sequential
+#from keras.layers import Conv2D, MaxPool2D, Dense, Flatten, Dropout
 
 import numpy
 #load the trained model to classify sign
@@ -53,8 +55,25 @@ classes = { 1:'Speed limit (20km/h)',
            42:'End of no passing',      
            43:'End no passing veh > 3.5 tons' }
                  
+def create():
+    model = Sequential()
+    model.add(Conv2D(filters=32, kernel_size=(5,5), activation='relu', input_shape=(30, 30, 3)))
+    model.add(Conv2D(filters=32, kernel_size=(5,5), activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2)))
+    model.add(Dropout(rate=0.25))
+    model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='relu'))
+    model.add(Conv2D(filters=64, kernel_size=(3, 3), activation='relu'))
+    model.add(MaxPool2D(pool_size=(2, 2)))
+    model.add(Dropout(rate=0.25))
+    model.add(Flatten())
+    model.add(Dense(256, activation='relu'))
+    model.add(Dropout(rate=0.5))
+    model.add(Dense(43, activation='softmax'))
+    return model
 def classify(file_path):
     global label_packed
+    #model = create()
+    #model.load_weights('traffic_classifier.h5')
     image = Image.open(file_path)
     image = image.resize((30,30))
     image = numpy.expand_dims(image, axis=0)
@@ -64,7 +83,7 @@ def classify(file_path):
     #print(sign)
     return sign
     
-if __name__ == "__main__": print(classify('00000.ppm'))
+if __name__ == "__main__": print(classify('download.jpeg'))
 
 
 
