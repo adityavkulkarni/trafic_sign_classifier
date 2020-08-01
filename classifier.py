@@ -62,6 +62,13 @@ def classify(file_path):
     pred = model.predict_classes([image])[0]
     sign = classes[pred+1]
     #print(sign)
-    return pred
+    return sign
     
-classify('00000.ppm')
+if __name__ == "__main__": print(classify('00000.ppm'))
+
+
+
+
+
+
+
